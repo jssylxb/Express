@@ -1,4 +1,5 @@
 var express = require('express');
+var number = require('./lib/number');
 
 var app = express();
 
@@ -9,15 +10,12 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 
-var numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
 app.get('/', function(req, res) {
     res.render('home');
 });
 
 app.get('/about', function(req, res) {
-    var randomNumber = numbers[Math.floor(Math.random() * numbers.length)];
-    res.render('about', { number: randomNumber });
+    res.render('about', { number: number.getNumber() });
 });
 
 //定制404页面
