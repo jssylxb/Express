@@ -9,27 +9,23 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', function(req, res) {
-    res.type('text/plain');
-    res.send('Meadowlark Travel');
+    res.render('home');
 });
 
 app.get('/about', function(req, res) {
-    res.type('text/plain');
-    res.send('about页面');
+    res.render('about');
 });
 
 //定制404页面
 app.use(function(req, res) {
-    res.type('text/plain');
     res.status(404);
-    res.send('404了');
+    res.render('404');
 });
 
 //定制500页面
 app.use(function(req, res) {
-    res.type('text/plain');
     res.status(500);
-    res.send('500了');
+    res.render('500');
 });
 
 app.listen(app.get('port'), function() {
