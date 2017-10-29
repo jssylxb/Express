@@ -7,13 +7,17 @@ var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' }
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
+app.use(express.static(__dirname + '/public'));
+
+var numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 app.get('/', function(req, res) {
     res.render('home');
 });
 
 app.get('/about', function(req, res) {
-    res.render('about');
+    var randomNumber = numbers[Math.floor(Math.random() * numbers.length)];
+    res.render('about', { number: randomNumber });
 });
 
 //定制404页面
