@@ -4,7 +4,7 @@ var number = require('./lib/number');
 var app = express();
 
 //设置handlebars视图引擎
-var handlebars = require('express3-handlebars').create({ defaultLayout: 'main' });
+var handlebars = require('express3-handlebars').create({ defaultLayout: 'main', extname: '.hbs' });
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
 app.set('port', process.env.PORT || 3000);
@@ -15,22 +15,43 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/', function(req, res) {
-    res.render('home');
+function getWeatherData() {
+    return {
+        locations: [{
+                name: '天津',
+                forecastUrl: 'https://www.baidu.com',
+                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
+                weather: '多云',
+                temp: '38度'
+            },
+            {
+                name: '北京',
+                forecastUrl: 'https://www.baidu.com',
+                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
+                weather: '多云',
+                temp: '39度'
+            },
+            {
+                name: '上海',
+                forecastUrl: 'https://www.baidu.com',
+                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
+                weather: '多云',
+                temp: '40度'
+            }
+        ]
+    }
+}
+
+app.use(function(req, res, next) {
+    if (!res.locals.partials) {
+        res.locals.partials = {};
+    }
+    res.locals.partials.weather = getWeatherData();
+    next();
 });
 
-// app.get('/headers',function(req,res){
-//     res.set('Content-Type','text/plain');
-//     var s = '';
-//     for(var name in req.headers){
-//         s += name + ':' + req.headers[name] + '\n';
-//     }
-//     res.send(s);
-// });
-
-var testJson = {arr:[{a:"aa"},{b:"bb"}]};
-app.get('/api/test',function(req,res){
-    res.json(testJson);
+app.get('/', function(req, res) {
+    res.render('home');
 });
 
 app.get('/about', function(req, res) {
