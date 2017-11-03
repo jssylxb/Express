@@ -1,0 +1,14 @@
+{{#section 'head'}}
+    <meta name="robots" content="noindex">
+{{/section}}
+
+<h1>Test Page</h1>
+<p>测试一下jq是否替换了h1</p>
+
+{{#section 'jquery'}}
+    <script>
+        $(function(){
+            $('h1').html('jquery works');
+        })
+    </script>
+{{/section}}

@@ -4,7 +4,17 @@ var number = require('./lib/number');
 var app = express();
 
 //设置handlebars视图引擎
-var handlebars = require('express3-handlebars').create({ defaultLayout: 'main', extname: '.hbs' });
+var handlebars = require('express3-handlebars').create({
+    defaultLayout: 'main',
+    extname: '.hbs',
+    helpers: {
+        section: function(name, options) {
+            if (!this._sections) this._sections = {};
+            this._sections[name] = options.fn(this);
+            return null;
+        }
+    }
+});
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
 app.set('port', process.env.PORT || 3000);
@@ -14,6 +24,8 @@ app.use(function(req, res, next) {
     res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
     next();
 });
+
+app.use(require('body-parser')());
 
 function getWeatherData() {
     return {
@@ -52,6 +64,10 @@ app.use(function(req, res, next) {
 
 app.get('/', function(req, res) {
     res.render('home');
+});
+
+app.get('/jquerytest', function(req, res) {
+    res.render('jquerytest');
 });
 
 app.get('/about', function(req, res) {
