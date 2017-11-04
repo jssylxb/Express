@@ -1,5 +1,6 @@
 var express = require('express');
 var number = require('./lib/number');
+var credentials = require('./credentials.js');
 
 var app = express();
 
@@ -62,12 +63,37 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use(require('cookie-parser')(credentials.cookieSecret));
+app.use(require('express-session')());
+
 app.get('/', function(req, res) {
     res.render('home');
 });
 
+app.get('/newsletter', function(req, res) {
+    res.render('newsletter', { csrf: "CSRF token goes here" })
+});
+
+//form正常提交
+// app.post('/process', function(req, res) {
+//     res.redirect(303, 'thank-you');
+// });
+
+//form Ajax提交
+app.post('/process', function(req, res) {
+    if (req.xhr || req.accepts('json,html') === 'json') {
+        res.send({ success: true });
+    } else {
+        res.redirect(303, 'thank-you');
+    }
+});
+
 app.get('/jquerytest', function(req, res) {
     res.render('jquerytest');
+});
+
+app.get('/thank-you', function(req, res) {
+    res.render('thank-you');
 });
 
 app.get('/about', function(req, res) {

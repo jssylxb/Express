@@ -1,0 +1,72 @@
+<h2>注册邮箱地址</h2>
+{{!-- form提交 --}}
+{{!-- <form action="/process?form=newletters" class="form-horizontal" role="form" method="POST">
+    <input type="hidden" name="_csrf" value="{{csrf}}">
+    <div class="from-group">
+        <label for="fieldName" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="fieldName" name="name">
+        </div>
+    </div>
+    <div class="from-group">
+        <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-4">
+            <input type="email" required class="form-control" id="fieldEmail" name="email">
+        </div>
+    </div>
+    <div class="from-group">
+        <div class="col-sm-4 col-sm-offset-2">
+            <button type="submit" class="btn btn-default">Register</button>
+        </div>
+    </div>
+</form> --}}
+
+
+{{!-- ajax提交 --}}
+<div class="formContainer">
+    <form action="/process?form=newletters" class="form-horizontal newsletterForm" role="form" method="POST">
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <div class="from-group">
+            <label for="fieldName" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="fieldName" name="name">
+            </div>
+        </div>
+        <div class="from-group">
+            <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-4">
+                <input type="email" required class="form-control" id="fieldEmail" name="email">
+            </div>
+        </div>
+        <div class="from-group">
+            <div class="col-sm-4 col-sm-offset-2">
+                <button type="submit" class="btn btn-default">Register</button>
+            </div>
+        </div>
+    </form>
+</div>   
+{{#section 'jquery'}}
+    <script>
+        $(function(){
+            $('.newsletterForm').on('submit',function(e){
+                e.preventDefault();
+                var action = $(this).attr('action');
+                var $container = $(this).closest('.formContainer');
+                $.ajax({
+                    url:action,
+                    type:"POST",
+                    success:function(data){
+                        if(data.success){
+                            $container.html("<h2>谢谢!</h2>");
+                        } else{
+                            $container.html("<h2>失败了</h2>");
+                        }
+                    },
+                    error: function(){
+                        $container.html("<h2>XHR没成功</h2>");
+                    }
+                });
+            });
+        });
+    </script>
+{{/section}}
